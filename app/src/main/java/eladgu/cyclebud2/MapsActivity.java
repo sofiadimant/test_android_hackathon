@@ -1,5 +1,8 @@
 package eladgu.cyclebud2;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -7,6 +10,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -25,6 +29,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -38,9 +43,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1020);
+        } else {
+            mMap.setMyLocationEnabled(true);
+        }
+
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng test_marker = new LatLng(32.086696, 34.789754);
+        mMap.addMarker(new MarkerOptions().position(test_marker).title("Marker in Hamedina Square"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(test_marker));
+        mMap.setTrafficEnabled(true);
+        mMap.setBuildingsEnabled(true);
+        UiSettings uiSettings = mMap.getUiSettings();
+        uiSettings.setZoomControlsEnabled(true);
+        uiSettings.setCompassEnabled(true);
+        uiSettings.setMyLocationButtonEnabled(true);
+        uiSettings.setScrollGesturesEnabled(true);
+        uiSettings.setZoomControlsEnabled(true);
+
+        addMarkersToMap(mMap, getMarkersCoordinates());
+
+        //TODO: add markers from a list
+
+    }
+
+    private void addMarkersToMap(GoogleMap mMap, LatLng[] markersCoordinates) {
+        for(int i=0;i<markersCoordinates.length; i++) {
+            mMap.addMarker(new MarkerOptions().position(markersCoordinates[i]).title(String.format("Marker num %d", i)));
+        }
+
+
+    }
+
+    private LatLng[] getMarkersCoordinates() {
+        LatLng[] coor_array;
+        coor_array = new LatLng[2];
+        coor_array[0] = new LatLng(32.089696, 34.799754);
+        coor_array[1] = new LatLng(32.090696, 34.809754);
+        return coor_array;
     }
 }
