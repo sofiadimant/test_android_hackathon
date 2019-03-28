@@ -2,6 +2,7 @@ package eladgu.cyclebud2;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -55,6 +56,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(test_marker));
         mMap.setTrafficEnabled(true);
         mMap.setBuildingsEnabled(true);
+
+        addMarkersToMap(mMap, getMarkersCoordinates()); // TODO: adds the markers received from the server
+
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
         uiSettings.setCompassEnabled(true);
@@ -62,25 +66,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         uiSettings.setScrollGesturesEnabled(true);
         uiSettings.setZoomControlsEnabled(true);
 
-        addMarkersToMap(mMap, getMarkersCoordinates());
-
-        //TODO: add markers from a list
 
     }
+
 
     private void addMarkersToMap(GoogleMap mMap, LatLng[] markersCoordinates) {
         for(int i=0;i<markersCoordinates.length; i++) {
             mMap.addMarker(new MarkerOptions().position(markersCoordinates[i]).title(String.format("Marker num %d", i)));
         }
-
-
     }
 
     private LatLng[] getMarkersCoordinates() {
         LatLng[] coor_array;
-        coor_array = new LatLng[2];
+        coor_array = new LatLng[3];
         coor_array[0] = new LatLng(32.089696, 34.799754);
         coor_array[1] = new LatLng(32.090696, 34.809754);
+        coor_array[2] = new LatLng(32.091696, 34.819754);
         return coor_array;
     }
 }
