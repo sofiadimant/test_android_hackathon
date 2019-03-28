@@ -4,6 +4,12 @@ import com.google.gson.annotations.SerializedName;
 
 public class RoadEvent {
 
+    public RoadEvent(Double lat, Double lng, Integer type, String description){
+        lat = lat;
+        lng = lng;
+        type = type;
+        description = description;
+    }
     @SerializedName("lat")
     @Expose
     private Double lat;

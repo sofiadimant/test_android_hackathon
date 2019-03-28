@@ -15,6 +15,10 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+
+import eladgu.cyclebud2.module.RoadEvent;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -57,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setTrafficEnabled(true);
         mMap.setBuildingsEnabled(true);
 
-        addMarkersToMap(mMap, getMarkersCoordinates()); // TODO: adds the markers received from the server
+        addMarkersToMap(mMap, getMarkersCoordinatesFromServer()); // TODO: adds the markers received from the server
 
         UiSettings uiSettings = mMap.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);
@@ -70,18 +74,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    private void addMarkersToMap(GoogleMap mMap, LatLng[] markersCoordinates) {
-        for(int i=0;i<markersCoordinates.length; i++) {
-            mMap.addMarker(new MarkerOptions().position(markersCoordinates[i]).title(String.format("Marker num %d", i)));
+    private void addMarkersToMap(GoogleMap mMap, ArrayList<RoadEvent> markersCoordinates) {
+        for(int i=0;i<markersCoordinates.size(); i++) {
+            LatLng cur_lat_lng = new LatLng(markersCoordinates.get(i).getLat(), markersCoordinates.get(i).getLng());
+            mMap.addMarker(new MarkerOptions().position(cur_lat_lng).title(String.format("Type: %s, Marker num %d", markersCoordinates.get(i).getLng(), i)));
         }
     }
 
-    private LatLng[] getMarkersCoordinates() {
-        LatLng[] coor_array;
-        coor_array = new LatLng[3];
-        coor_array[0] = new LatLng(32.089696, 34.799754);
-        coor_array[1] = new LatLng(32.090696, 34.809754);
-        coor_array[2] = new LatLng(32.091696, 34.819754);
-        return coor_array;
+    private ArrayList<RoadEvent> getMarkersCoordinatesFromServer() {
+        ArrayList<RoadEvent> arrayList = new ArrayList();
+        arrayList.add(new RoadEvent(32.089696, 34.799754, 0, "type 0"));
+        arrayList.add(new RoadEvent(32.090696, 34.809754, 0, "type 0"));
+        arrayList.add(new RoadEvent(32.091696, 34.819754, 0, "type 1"));
+        arrayList.add(new RoadEvent(32.092696, 34.829754, 0, "type 1"));
+        return arrayList;
     }
 }
